@@ -8,6 +8,9 @@ import keyboard
 import threading
 import time
 
+# Minimum seller rating to save seller
+MIN_RATING =  1000
+
 # Phrases not found in the product description
 not_phrases = ["laser", "prop", "replica", "model"]
 
@@ -59,7 +62,7 @@ def search(search):
             rating = 0
 
         # Checks listing exists
-        if title and price and seller_info and rating > 2000 and contains(product_url, "3d printed"):
+        if title and price and seller_info and rating > MIN_RATING and contains(product_url, "3d printed"):
 
             
             seller = seller_info.text.split(' ')[0]
@@ -155,13 +158,15 @@ pending_searches.append("BT Smart Hub 2 Wall mount bracket smarthub homehub Slim
 pending_searches.append("oral b toothbrush stand")
 pending_searches.append("VWindow Security Safety Lock for Polyplastic Latches in Caravans Motorhomes")
 pending_searches.append("oil filler cap removal key tool keychain 71117691446 compatible with BMW motorbike")
+pending_searches.append("Ikea STYRBAR Remote Adapter - UK Light Switch Converter - Cover")
+
 # Searches sellers for first 10 products
 def run():
     with open("data.txt", "w") as f:
         f.write("")
     with open("sellers.txt", "w") as f:
         f.write("")
-    for i in range(30):
+    for i in range(30000):
         while len(sellers) == 0:
             
             while(len(pending_searches) == 0):
@@ -171,14 +176,16 @@ def run():
 
 
         complete_sellers.append(sellers[0])
-        
-        with open("sellers.txt", "a") as f:
-            f.write(sellers[0] + "\n")
+    
 
-        while(len(sellers) == 0):
-            time.sleep(5)
-        # Finds sellers products
-        seller_search(sellers.pop(0))
+        if(len(sellers) > 0):
+            try:
+                with open("sellers.txt", "a") as f:
+                    f.write(sellers[0] + "\n")
+                # Finds sellers products
+                seller_search(sellers.pop(0))
+            except:
+                time.sleep(2)
 
     print(complete_sellers)
     print(sellers)
@@ -187,12 +194,6 @@ def run():
 
 
 
-threading.Thread(target=run, daemon=True).start()
-threading.Thread(target=run, daemon=True).start()
-threading.Thread(target=run, daemon=True).start()
-threading.Thread(target=run, daemon=True).start()
-threading.Thread(target=run, daemon=True).start()
-threading.Thread(target=run, daemon=True).start()
 threading.Thread(target=run, daemon=True).start()
 threading.Thread(target=run, daemon=True).start()
 threading.Thread(target=run, daemon=True).start()

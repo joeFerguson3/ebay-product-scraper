@@ -21,6 +21,7 @@ def check_proxies():
                                 proxies={"https": proxy})
 
         except:
+            # print("failed")
             continue
         if res.status_code == 200:
             print(proxy)
