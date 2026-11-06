@@ -1,4 +1,4 @@
-# PrintScout
+# Ebay Product Scraper
 
 **Find profitable products to 3D print, by researching what already sells on eBay.**
 
@@ -7,20 +7,17 @@
 
 ## What it does
 
-- **Finds products.** Start from a few search terms and PrintScout scans eBay
+- **Finds products.** Start from a few search terms and scans eBay
   for sellers of 3D-printed items, then uses their listings to find more
   products and more sellers.
 - **Scores each product out of 100.** It weighs how many have sold, how the
   wider market is doing, how many other listings there are, and how much
   profit you'd make per sale and per hour of printing, using your own costs.
-  Every score comes with a plain-English explanation.
 - **Checks the market.** One click looks up current and recently sold eBay
   listings for a product.
 - **Flags risks.** Products based on licensed characters or franchises are
   flagged, and products that would lose money are marked to avoid.
-- **Spots 3D printing in photos.** An optional image model (a CNN trained on
-  photos from your own scans) recognises 3D-printed items even when the
-  listing never says so.
+- **Spots 3D printing in photos. a CNN recognises 3D-printed items.
 
 ## How you use it
 
