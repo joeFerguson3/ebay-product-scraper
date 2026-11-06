@@ -34,13 +34,15 @@ def test_build_training_set(tmp_data):
     assert autolabel.build(db, ImgClient(), on_log=lambda m: None)["positives"] == 0
 
 
-def test_group_of_and_grouped_split():
+def test_seller_of_and_split():
     import pytest
     pytest.importorskip("torch")
-    from printscout.vision.autolabel import auto_filename, group_of
+    from printscout.vision.autolabel import photo_filename, seller_of
     from printscout.vision.train import split_by_group
-    assert group_of(auto_filename("my shop!", "123")) == "seller:my-shop-"
-    assert group_of("upload_abc.jpg") == "file:upload_abc.jpg"
+    assert photo_filename("my shop!", "123") == "my-shop-__123.jpg"
+    assert seller_of(photo_filename("my shop!", "123")) == "my-shop-"
+    assert seller_of("auto__old-shop__456.jpg") == "old-shop"   # older filenames
+    assert seller_of("upload_abc.jpg") == "upload_abc.jpg"
     # 5 sellers x 4 photos each: no seller may appear on both sides
     groups = [f"seller:{i // 4}" for i in range(20)]
     tr, va = split_by_group(groups, 0.2, seed=1)

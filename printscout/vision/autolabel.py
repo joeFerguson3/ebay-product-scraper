@@ -8,25 +8,23 @@ from ..config import CLASS_NEGATIVE, CLASS_POSITIVE, DATASET_DIR
 from ..db import Database
 from ..scraper.http import EbayClient, FetchError
 
-AUTO_PREFIX = "auto__"
 IMAGE_EXTS = {".jpg", ".jpeg", ".png", ".webp", ".bmp"}
-# anything that isn't safe in a filename, e.g. the space in "joe's prints"
-_SAFE = re.compile(r"[^A-Za-z0-9_.-]+")
+# characters that aren't allowed in a filename, e.g. the ' and space in "joe's prints"
+_UNSAFE = re.compile(r"[^A-Za-z0-9_.-]+")
 
 
-# e.g. auto__joes-prints__123456789.jpg
-def auto_filename(seller: str | None, item_id: str) -> str:
-    seller = _SAFE.sub("-", seller or "unknown")[:40]
-    return f"{AUTO_PREFIX}{seller}__{item_id}.jpg"
+# e.g. joes-prints__123456789.jpg. the seller is kept in the name so training
+# can keep all of one seller's photos together
+def photo_filename(seller: str | None, item_id: str) -> str:
+    seller = _UNSAFE.sub("-", seller or "unknown")
+    return f"{seller}__{item_id}.jpg"
 
 
-# which group a training image belongs to when splitting: its seller for auto images,
-# otherwise the file on its own
-def group_of(filename: str) -> str:
-    name = Path(filename).name
-    if name.startswith(AUTO_PREFIX):
-        return "seller:" + name[len(AUTO_PREFIX):].split("__")[0]
-    return "file:" + name
+# the seller from a photo's filename (the part before the item id).
+# older photos are called auto__seller__id.jpg, which works too
+def seller_of(filename: str) -> str:
+    parts = Path(filename).name.split("__")
+    return parts[-2] if len(parts) > 1 else parts[0]
 
 
 # the image files in a folder
@@ -47,7 +45,7 @@ def _existing_ids() -> set[str]:
     ids = set()
     for label in (CLASS_POSITIVE, CLASS_NEGATIVE):
         for p in _images(DATASET_DIR / label):
-            ids.add(p.stem.split("__")[-1])  # the item id is the last part of auto__seller__id
+            ids.add(p.stem.split("__")[-1])  # the item id is the last part of seller__id
     return ids
 
 
@@ -76,7 +74,7 @@ def build(db: Database, client: EbayClient, *, max_per_class: int = 300,
     for i, (row, label) in enumerate(to_download):
         if stop_event and stop_event.is_set():
             break
-        path = DATASET_DIR / label / auto_filename(row["seller"], row["item_id"])
+        path = DATASET_DIR / label / photo_filename(row["seller"], row["item_id"])
         try:
             data = client.image(row["image_url"])
         except FetchError:

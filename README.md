@@ -2,10 +2,6 @@
 
 **Find profitable products to 3D print, by researching what already sells on eBay.**
 
-PrintScout is a local web app I built for my own 3D printing business. I sell
-prints on Amazon UK, and the hardest part is deciding what to make. Instead of
-guessing, PrintScout finds 3D-printed products that already have proven sales
-on eBay and works out whether each one would be worth making.
 
 ![Python](https://img.shields.io/badge/Python-3.10+-3776AB) ![FastAPI](https://img.shields.io/badge/FastAPI-backend-009688) ![PyTorch](https://img.shields.io/badge/PyTorch-CNN-EE4C2C) ![SQLite](https://img.shields.io/badge/SQLite-storage-003B57)
 

@@ -1,4 +1,4 @@
-"""HTTP client for eBay with retries, back-off, and polite delays."""
+
 from __future__ import annotations
 
 import random

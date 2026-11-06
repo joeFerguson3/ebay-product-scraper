@@ -15,7 +15,7 @@ from torch.utils.data import DataLoader, Subset
 from torchvision.datasets import ImageFolder
 
 from ..config import CLASS_POSITIVE, DATASET_DIR, METRICS_PATH, MODEL_PATH
-from .autolabel import group_of
+from .autolabel import seller_of
 from .model import best_device, build_model, eval_transform, set_backbone_trainable, train_transform
 
 MIN_IMAGES_PER_CLASS = 10
@@ -132,7 +132,7 @@ def train(dataset_dir: Path = DATASET_DIR, out_path: Path = MODEL_PATH, *,
                              f"found {counts[idx]}")
     positive = base.class_to_idx[CLASS_POSITIVE]
 
-    groups = [group_of(path) for path, _ in base.samples]
+    groups = [seller_of(path) for path, _ in base.samples]
     train_idx, val_idx = split_by_group(groups, val_fraction, seed)
     # same files loaded twice, once with augmentation for training and once without for validation
     train_ds = ImageFolder(str(dataset_dir), transform=train_transform(), loader=_rgb_loader)
