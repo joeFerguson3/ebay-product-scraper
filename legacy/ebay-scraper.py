@@ -9,7 +9,7 @@ import threading
 import time
 
 # Minimum seller rating to save seller
-MIN_RATING =  1000
+MIN_RATING =  100
 
 # Phrases not found in the product description
 not_phrases = ["laser", "prop", "replica", "model"]
@@ -21,10 +21,10 @@ headers = {
 }
 sellers = []
 
-proxy = {
-  "http": "http://brd-customer-hl_c32170ea-zone-residential_proxy1:3jl9fzirr9k1@brd.superproxy.io:33335",
-  "https": "http://brd-customer-hl_c32170ea-zone-residential_proxy1:3jl9fzirr9k1@brd.superproxy.io:33335"
-}
+import os
+# Credentials removed from source - set PRINTSCOUT_PROXY_URL in a .env file instead
+_proxy_url = os.environ.get("PRINTSCOUT_PROXY_URL")
+proxy = {"http": _proxy_url, "https": _proxy_url} if _proxy_url else {}
 session = HTMLSession()
 session.proxies.update(proxy)
 # sellers which have been searched
